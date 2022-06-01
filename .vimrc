@@ -43,8 +43,9 @@ set gdefault   " 置換の時 g オプションをデフォルトで有効にす
 set tabstop=2     " 画面上でタブ文字が占める幅
 set shiftwidth=2  " 自動インデントでずれる幅
 set softtabstop=2 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
-set smartindent
+
 set autoindent  " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
+set smartindent
 
 " 動作環境との統合関連の設定
 
@@ -81,6 +82,7 @@ set encoding=UTF-8
 
 call plug#begin('~/.vim/plugged')
 
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'simeji/winresizer'
 Plug 'vim-airline/vim-airline'
@@ -95,6 +97,7 @@ Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 
 call plug#end()
+
 autocmd vimenter * ++nested colorscheme gruvbox
 set background=dark    " Setting dark mode
 "----------------------------------------
@@ -112,8 +115,8 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 let g:fern#renderer = "nerdfont"
 
-" <Leader>にSpaceキー割り当て
-let mapleader = "\<Space>"
+" <Leader>に 割り当て
+let mapleader = ","
 " 隠しファイルを表示する
 let g:fern#default_hidden=1
 " Fern .をSpace+eキーに置き換え
@@ -128,3 +131,24 @@ augroup my-glyph-palette
   autocmd FileType fern call glyph_palette#apply()
   autocmd FileType nerdtree,startify call glyph_palette#apply()
 augroup END
+
+
+
+augroup TransparentBG
+  	autocmd!
+	autocmd Colorscheme * highlight Normal ctermbg=none
+	autocmd Colorscheme * highlight NonText ctermbg=none
+	autocmd Colorscheme * highlight LineNr ctermbg=none
+	autocmd Colorscheme * highlight Folded ctermbg=none
+	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
+augroup END
+if has('gui')
+  set guioptions-=T
+  set guioptions-=m
+  set guioptions-=r
+  set guioptions-=R
+  set guioptions-=l
+  set guioptions-=L
+  set guioptions-=b
+endif
+
