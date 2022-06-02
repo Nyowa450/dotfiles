@@ -74,7 +74,7 @@ inoremap <silent> jj <ESC>
 
 noremap <Hankaku/Zenkaku> <esc>
 
-
+set termguicolors
 set laststatus=2
 set encoding=UTF-8
 "----------------------------------------
@@ -98,7 +98,8 @@ Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'altercation/vim-colors-solarized'
-
+Plug 'arcticicestudio/nord-vim'
+Plug 'bluz71/vim-nightfly-guicolors'
 
 call plug#end()
 
@@ -107,14 +108,14 @@ nnoremap <C-B> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
 syntax enable
-colorscheme solarized
+colorscheme nightfly
 
 let g:seiya_auto_enable=1
 
 
 set noshowmode
 let g:lightline = {
-      \ 'colorscheme': 'selenized_dark',
+      \ 'colorscheme': 'nightfly',
       \ }
 "----------------------------------------
 " Plugin Settings
