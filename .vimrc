@@ -74,7 +74,7 @@ inoremap <silent> jj <ESC>
 
 noremap <Hankaku/Zenkaku> <esc>
 
-           
+set laststatus=2
 set encoding=UTF-8
 "----------------------------------------
 " Plugin
@@ -85,8 +85,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'simeji/winresizer'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'morhetz/gruvbox'
 Plug 'cohama/lexima.vim'
@@ -95,11 +94,20 @@ Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'altercation/vim-colors-solarized'
+
 
 call plug#end()
 
-autocmd vimenter * ++nested colorscheme gruvbox
-set background=dark    " Setting dark mode
+syntax enable
+colorscheme solarized
+let g:solarized_termtrans=1
+
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'selenized_dark',
+      \ }
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
@@ -142,6 +150,7 @@ augroup TransparentBG
 	autocmd Colorscheme * highlight Folded ctermbg=none
 	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
 augroup END
+
 if has('gui')
   set guioptions-=T
   set guioptions-=m
