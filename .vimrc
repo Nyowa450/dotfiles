@@ -74,6 +74,7 @@ inoremap <silent> jj <ESC>
 
 noremap <Hankaku/Zenkaku> <esc>
 
+
 set laststatus=2
 set encoding=UTF-8
 "----------------------------------------
@@ -83,6 +84,7 @@ set encoding=UTF-8
 call plug#begin('~/.vim/plugged')
 
 
+Plug 'miyakogi/seiya.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'simeji/winresizer'
 Plug 'itchyny/lightline.vim'
@@ -100,9 +102,15 @@ Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
+
+nnoremap <C-B> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
 syntax enable
 colorscheme solarized
-let g:solarized_termtrans=1
+
+let g:seiya_auto_enable=1
+
 
 set noshowmode
 let g:lightline = {
@@ -131,7 +139,7 @@ let g:fern#default_hidden=1
 nnoremap <silent> <Leader>e :<C-u>Fern .<CR>
 
 " Feren　Ctrl+nでファイルツリーを表示/非表示する
-nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=25<CR>
+nnoremap <C-n> :Fern .<CR>
 
 " アイコンに色をつける
 augroup my-glyph-palette
