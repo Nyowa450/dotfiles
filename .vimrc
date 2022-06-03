@@ -1,5 +1,5 @@
 set nocompatible
-
+set shell=fish
 " 画面表示の設定
 
 set number         " 行番号を表示する
@@ -58,14 +58,12 @@ set shellslash
 " インサートモードから抜けると自動的にIMEをオフにする
 set iminsert=2
 
-" コマンドラインの設定
-
 " コマンドラインモードでTABキーによるファイル名補完を有効にする
 set wildmenu wildmode=list:longest,full
 " コマンドラインの履歴を10000件保存する
 set history=10000
-
-
+" <Leader>に 割り当て
+let mapleader = "\<Space>"
 "ビープ音すべてを無効にする
 set visualbell t_vb=
 set noerrorbells "エラーメッセージの表示時にビープを鳴らさない
@@ -73,7 +71,7 @@ set noerrorbells "エラーメッセージの表示時にビープを鳴らさ�
 inoremap <silent> jj <ESC>
 
 noremap <Hankaku/Zenkaku> <esc>
-
+nmap <F1> :tabnew $MYVIMRC<CR>
 set termguicolors
 set laststatus=2
 set encoding=UTF-8
@@ -83,7 +81,10 @@ set encoding=UTF-8
 
 call plug#begin('~/.vim/plugged')
 
-
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'mangeshrex/everblush.vim'
+Plug 'yggdroot/indentLine'
 Plug 'miyakogi/seiya.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'simeji/winresizer'
@@ -103,23 +104,20 @@ Plug 'bluz71/vim-nightfly-guicolors'
 
 call plug#end()
 
-
-nnoremap <C-B> :bnext<CR>
-nnoremap <C-P> :bprev<CR>
-
 syntax enable
 colorscheme nightfly
-
 let g:seiya_auto_enable=1
 
 
-set noshowmode
+
 let g:lightline = {
       \ 'colorscheme': 'nightfly',
       \ }
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
+"Coc.vim関連の設定
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -130,17 +128,20 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 
+"ノーマルモードで
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gh :<C-u>call CocAction('doHover')<cr>
 let g:fern#renderer = "nerdfont"
 
-" <Leader>に 割り当て
-let mapleader = ","
+
 " 隠しファイルを表示する
 let g:fern#default_hidden=1
-" Fern .をSpace+eキーに置き換え
-nnoremap <silent> <Leader>e :<C-u>Fern .<CR>
 
 " Feren　Ctrl+nでファイルツリーを表示/非表示する
-nnoremap <C-n> :Fern .<CR>
+nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=25<CR>
 
 " アイコンに色をつける
 augroup my-glyph-palette
@@ -149,7 +150,8 @@ augroup my-glyph-palette
   autocmd FileType nerdtree,startify call glyph_palette#apply()
 augroup END
 
-
+" indentLineの設定
+let g:indentLine_char = '┊'
 
 augroup TransparentBG
   	autocmd!
