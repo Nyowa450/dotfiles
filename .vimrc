@@ -1,5 +1,8 @@
+
 set nocompatible
+":terminalで起動するshellをFishに
 set shell=fish
+
 " 画面表示の設定
 
 set number         " 行番号を表示する
@@ -37,16 +40,17 @@ set smartcase  " 大文字と小文字が混在した言葉で検索を行った
 set wrapscan   " 最後尾まで検索を終えたら次の検索で先頭に移る
 set gdefault   " 置換の時 g オプションをデフォルトで有効にする
 
-" タブ/インデントの設定
 
-  " タブ入力を複数の空白入力に置き換える
+
+ " タブ入力を複数の空白入力に置き換える
 set tabstop=2     " 画面上でタブ文字が占める幅
 set shiftwidth=2  " 自動インデントでずれる幅
 set softtabstop=2 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
-
 set autoindent  " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
 set smartindent
-
+" ビジュアルモードでインデントしたあと再度選択
+vnoremap < <gv
+vnoremap > >gv
 " 動作環境との統合関連の設定
 
 " OSのクリップボードをレジスタ指定無しで Yank, Put 出来るようにする
@@ -57,47 +61,49 @@ set mouse=a
 set shellslash
 " インサートモードから抜けると自動的にIMEをオフにする
 set iminsert=2
-
 " コマンドラインモードでTABキーによるファイル名補完を有効にする
 set wildmenu wildmode=list:longest,full
 " コマンドラインの履歴を10000件保存する
 set history=10000
-" <Leader>に 割り当て
+" <Leader>に スペースを割り当て
 let mapleader = "\<Space>"
 "ビープ音すべてを無効にする
 set visualbell t_vb=
 set noerrorbells "エラーメッセージの表示時にビープを鳴らさない
 "jjをEscにバインド
 inoremap <silent> jj <ESC>
-
-noremap <Hankaku/Zenkaku> <esc>
+"F1キーで.vimrcを開く
 nmap <F1> :tabnew $MYVIMRC<CR>
-set termguicolors
-set laststatus=2
+"UTF-8を指定
 set encoding=UTF-8
+"ステータスラインにGitブランチ名を表示
+set statusline=%{FugitiveStatusline()}
+
 "----------------------------------------
 " Plugin
 "----------------------------------------
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'ghifarit53/tokyonight-vim'
 Plug 'mangeshrex/everblush.vim'
-Plug 'yggdroot/indentLine'
-Plug 'miyakogi/seiya.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'yggdroot/indentLine' "インデントに線を追加
+Plug 'miyakogi/seiya.vim' "余分な背景等を非表示
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "Coc.nvimを導入
 Plug 'simeji/winresizer'
-Plug 'itchyny/lightline.vim'
-Plug 'ryanoasis/vim-devicons'
+Plug 'itchyny/lightline.vim' "ステータスラインをカスタマイズ
+Plug 'ryanoasis/vim-devicons' "アイコン導入
 Plug 'morhetz/gruvbox'
 Plug 'cohama/lexima.vim'
 Plug 'lambdalisue/nerdfont.vim'
-Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern.vim' "多機能ファイラー
 Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
-Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot' "構文解析
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-nightfly-guicolors'
@@ -105,20 +111,24 @@ Plug 'bluz71/vim-nightfly-guicolors'
 call plug#end()
 
 syntax enable
-colorscheme nightfly
+set termguicolors
 let g:seiya_auto_enable=1
 
-
-
+"カラースキーム指定
+colorscheme tokyonight
+"Lightlineのテーマ指定
 let g:lightline = {
-      \ 'colorscheme': 'nightfly',
+      \ 'colorscheme': 'tokyonight',
       \ }
+ 
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
+
+
 "Coc.vim関連の設定
 
-" Use tab for trigger completion with characters ahead and navigate.
+" 補完欄を移動するのにTABキーを用いる
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
@@ -128,21 +138,20 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 
-"ノーマルモードで
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gh :<C-u>call CocAction('doHover')<cr>
+"Coc.nvim:ノーマルモードで
+nmap <silent> gd <Plug>(coc-definition) "定義にジャンプ→Ctrl-oで戻る
+nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
+nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
+nmap <silent> gr <Plug>(coc-references) "参照
+nmap <silent> gh :<C-u>call CocAction('doHover')<cr> ドキュメントを参照
+
+"Fern.vim関連
+
 let g:fern#renderer = "nerdfont"
-
-
 " 隠しファイルを表示する
 let g:fern#default_hidden=1
-
-" Feren　Ctrl+nでファイルツリーを表示/非表示する
+"Fern　Ctrl+nでファイルツリーを表示/非表示する
 nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=25<CR>
-
 " アイコンに色をつける
 augroup my-glyph-palette
   autocmd! *
@@ -153,6 +162,7 @@ augroup END
 " indentLineの設定
 let g:indentLine_char = '┊'
 
+"余計なUIを透明化する
 augroup TransparentBG
   	autocmd!
 	autocmd Colorscheme * highlight Normal ctermbg=none
