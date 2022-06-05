@@ -48,9 +48,7 @@ set shiftwidth=2  " 自動インデントでずれる幅
 set softtabstop=2 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
 set autoindent  " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
 set smartindent
-" ビジュアルモードでインデントしたあと再度選択
-vnoremap < <gv
-vnoremap > >gv
+
 " 動作環境との統合関連の設定
 
 " OSのクリップボードをレジスタ指定無しで Yank, Put 出来るようにする
@@ -85,6 +83,8 @@ set statusline=%{FugitiveStatusline()}
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'simeji/winresizer'
+Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -107,20 +107,33 @@ Plug 'sheerun/vim-polyglot' "構文解析
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-nightfly-guicolors'
+Plug 'ayu-theme/ayu-vim'
+Plug 'AhmedAbdulrahman/vim-aylin'
 
 call plug#end()
 
 syntax enable
 set termguicolors
-let g:seiya_auto_enable=1
+
+"tmux用のカラー設定
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "カラースキーム指定
-colorscheme tokyonight
+let ayucolor="dark" 
+colorscheme ayu
+
 "Lightlineのテーマ指定
 let g:lightline = {
-      \ 'colorscheme': 'tokyonight',
+      \ 'colorscheme': 'ayu_mirage',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
       \ }
- 
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
@@ -143,7 +156,15 @@ nmap <silent> gd <Plug>(coc-definition) "定義にジャンプ→Ctrl-oで戻る
 nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
 nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
 nmap <silent> gr <Plug>(coc-references) "参照
-nmap <silent> gh :<C-u>call CocAction('doHover')<cr> ドキュメントを参照
+
+nnoremap <silent> K :call ShowDocumentation()<CR> 
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
 
 "Fern.vim関連
 
@@ -162,23 +183,4 @@ augroup END
 " indentLineの設定
 let g:indentLine_char = '┊'
 
-"余計なUIを透明化する
-augroup TransparentBG
-  	autocmd!
-	autocmd Colorscheme * highlight Normal ctermbg=none
-	autocmd Colorscheme * highlight NonText ctermbg=none
-	autocmd Colorscheme * highlight LineNr ctermbg=none
-	autocmd Colorscheme * highlight Folded ctermbg=none
-	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
-augroup END
-
-if has('gui')
-  set guioptions-=T
-  set guioptions-=m
-  set guioptions-=r
-  set guioptions-=R
-  set guioptions-=l
-  set guioptions-=L
-  set guioptions-=b
-endif
 
