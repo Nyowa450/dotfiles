@@ -4,9 +4,9 @@ set nocompatible
 set shell=fish
 
 " 画面表示の設定
-
 set number         " 行番号を表示する
 
+set pumheight=16
 set laststatus=2   " ステータス行を常に表示
 set cmdheight=2    " メッセージ表示欄を2行確保
 set showmatch      " 対応する括弧を強調表示
@@ -89,7 +89,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'ghifarit53/tokyonight-vim'
-Plug 'mangeshrex/everblush.vim'
 Plug 'yggdroot/indentLine' "インデントに線を追加
 Plug 'miyakogi/seiya.vim' "余分な背景等を非表示
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Coc.nvimを導入
@@ -109,9 +108,21 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-nightfly-guicolors'
 Plug 'ayu-theme/ayu-vim'
 Plug 'AhmedAbdulrahman/vim-aylin'
+Plug 'cocopon/iceberg.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
+Plug 'sainnhe/sonokai'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+Plug 'junegunn/seoul256.vim'
+Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
+Plug 'haishanh/night-owl.vim'
 
 call plug#end()
 
+"バッファを切り替える（※バッファはメモリに展開されたファイル）
+"必ずしもウィンドウで表示されてるわけではない
+nnoremap <silent> <C-j> :bprev<CR>
+nnoremap <silent> <C-k> :bnext<CR>
 syntax enable
 set termguicolors
 
@@ -120,12 +131,14 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "カラースキーム指定
+let mapleader = ","
 let ayucolor="dark" 
-colorscheme ayu
+
+colorscheme embark
 
 "Lightlineのテーマ指定
 let g:lightline = {
-      \ 'colorscheme': 'ayu_mirage',
+      \ 'colorscheme': 'embark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -156,6 +169,7 @@ nmap <silent> gd <Plug>(coc-definition) "定義にジャンプ→Ctrl-oで戻る
 nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
 nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
 nmap <silent> gr <Plug>(coc-references) "参照
+nmap <silent> gF <Plug>(coc-format-selected) "formatする
 
 nnoremap <silent> K :call ShowDocumentation()<CR> 
 function! ShowDocumentation()
@@ -183,4 +197,32 @@ augroup END
 " indentLineの設定
 let g:indentLine_char = '┊'
 
+"透明化
+"highlight Normal ctermbg=NONE guibg=NONE
+"highlight NonText ctermbg=NONE guibg=NONE
+"highlight SpecialKey ctermbg=NONE guibg=NONE
+"highlight EndOfBuffer ctermbg=NONE guibg=NONE
+"highlight LineNr ctermbg=NONE guibg=NONE
+"highlight SignCulumn ctermbg=NONE guibg=NONE
+"highlight VertSplit ctermbg=NONE guibg=NONE
 
+"if has('gui')
+  set guioptions-=T
+  set guioptions-=m
+  set guioptions-=r
+  set guioptions-=R
+  set guioptions-=l
+  set guioptions-=L
+  set guioptions-=b
+"endif
+
+"fzf.vimの起動時のウィンドウの高さ
+let g:fzf_layout = { 'down': '60%' }
+
+"fzf.vimのショートカット（","+各キーで検索起動）
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>g :GFiles<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>l :BLines<CR>
+nnoremap <silent> <leader>h :History<CR>
+nnoremap <silent> <leader>m :Mark<CR>
