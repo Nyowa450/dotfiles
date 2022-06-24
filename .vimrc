@@ -5,7 +5,7 @@ set shell=fish
 
 " 画面表示の設定
 set number         " 行番号を表示する
-
+set showtabline=2  " always show tabline
 set pumheight=16
 set laststatus=2   " ステータス行を常に表示
 set cmdheight=2    " メッセージ表示欄を2行確保
@@ -63,8 +63,7 @@ set iminsert=2
 set wildmenu wildmode=list:longest,full
 " コマンドラインの履歴を10000件保存する
 set history=10000
-" <Leader>に スペースを割り当て
-let mapleader = "\<Space>"
+
 "ビープ音すべてを無効にする
 set visualbell t_vb=
 set noerrorbells "エラーメッセージの表示時にビープを鳴らさない
@@ -77,6 +76,16 @@ set encoding=UTF-8
 "ステータスラインにGitブランチ名を表示
 set statusline=%{FugitiveStatusline()}
 
+" InsertモードでEmacsのキーバインドを使えるようにする
+imap <C-p> <Up>
+imap <C-n> <Down>
+imap <C-b> <Left>
+imap <C-f> <Right>
+imap <C-a> <C-o>:call <SID>home()<CR>
+imap <C-e> <End>
+imap <C-d> <Del>
+imap <C-h> <BS>
+imap <C-k> <C-r>=<SID>kill()<CR>
 "----------------------------------------
 " Plugin
 "----------------------------------------
@@ -116,6 +125,7 @@ Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'junegunn/seoul256.vim'
 Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 Plug 'haishanh/night-owl.vim'
+Plug 'mengelbrecht/lightline-bufferline'
 
 call plug#end()
 
@@ -133,28 +143,56 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 "カラースキーム指定
 let mapleader = ","
 let ayucolor="dark" 
-
+let background="dark"
 colorscheme embark
 
-"Lightlineのテーマ指定
+"use lightline-buffer in lightline
 let g:lightline = {
-      \ 'colorscheme': 'embark',
+      \ 'colorscheme': 'rosepine',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead'
       \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
       \ }
+      \ }
+
+
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
+" lightline-buffer ui settings
+" replace these symbols with ascii characters if your environment does not support unicode
+let g:lightline_buffer_logo = ' '
+let g:lightline_buffer_readonly_icon = ''
+let g:lightline_buffer_modified_icon = '✭'
+let g:lightline_buffer_git_icon = ' '
+let g:lightline_buffer_ellipsis_icon = '..'
+let g:lightline_buffer_expand_left_icon = '◀ '
+let g:lightline_buffer_expand_right_icon = ' ▶'
+let g:lightline_buffer_active_buffer_left_icon = ''
+let g:lightline_buffer_active_buffer_right_icon = ''
+let g:lightline_buffer_separator_icon = '  '
+
+" enable devicons, only support utf-8
+" require <https://github.com/ryanoasis/vim-devicons>
+let g:lightline_buffer_enable_devicons = 1
 
 
 "Coc.vim関連の設定
 
 " 補完欄を移動するのにTABキーを用いる
+" Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
@@ -162,6 +200,12 @@ inoremap <silent><expr> <TAB>
       \ CheckBackspace() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 
 
 "Coc.nvim:ノーマルモードで
@@ -226,3 +270,15 @@ nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :BLines<CR>
 nnoremap <silent> <leader>h :History<CR>
 nnoremap <silent> <leader>m :Mark<CR>
+
+" The prefix key.
+nnoremap    [Tag]   <Nop>
+nmap    t [Tag]
+
+map <silent> [Tag]x :tabclose<CR>
+" tx タブを閉じる
+map <silent> [Tag]n :tabnext<CR>
+" tn 次のタブ
+map <silent> [Tag]p :tabprevious<CR>
+" tp 前のタブ
+
