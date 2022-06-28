@@ -126,7 +126,8 @@ Plug 'junegunn/seoul256.vim'
 Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 Plug 'haishanh/night-owl.vim'
 Plug 'mengelbrecht/lightline-bufferline'
-
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
 call plug#end()
 
 "バッファを切り替える（※バッファはメモリに展開されたファイル）
@@ -180,8 +181,8 @@ let g:lightline_buffer_git_icon = ' '
 let g:lightline_buffer_ellipsis_icon = '..'
 let g:lightline_buffer_expand_left_icon = '◀ '
 let g:lightline_buffer_expand_right_icon = ' ▶'
-let g:lightline_buffer_active_buffer_left_icon = ''
-let g:lightline_buffer_active_buffer_right_icon = ''
+let g:lightline_buffer_active_buffer_left_icon = '◀'
+let g:lightline_buffer_active_buffer_right_icon = '▶'
 let g:lightline_buffer_separator_icon = '  '
 
 " enable devicons, only support utf-8
@@ -282,3 +283,9 @@ map <silent> [Tag]n :tabnext<CR>
 map <silent> [Tag]p :tabprevious<CR>
 " tp 前のタブ
 
+"Markdown関連
+"markdown-preview-enhanced.openPreviewを起動（ブラウザで閲覧）
+nnoremap <silent> <leader>p :CocCommand markdown-preview-enhanced.openPreview<CR>
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_folding_disabled = 1
