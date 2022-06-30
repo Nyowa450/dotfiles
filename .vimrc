@@ -11,7 +11,7 @@ set laststatus=2   " ステータス行を常に表示
 set cmdheight=2    " メッセージ表示欄を2行確保
 set showmatch      " 対応する括弧を強調表示
 set helpheight=999 " ヘルプを画面いっぱいに開く
-
+set noshowmode
 " 不可視文字の表示記号指定
 set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 
@@ -112,22 +112,19 @@ Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 Plug 'sheerun/vim-polyglot' "構文解析
-Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-nightfly-guicolors'
-Plug 'ayu-theme/ayu-vim'
 Plug 'AhmedAbdulrahman/vim-aylin'
 Plug 'cocopon/iceberg.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
-Plug 'sainnhe/sonokai'
-Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-Plug 'junegunn/seoul256.vim'
+Plug 'phanviet/vim-monokai-pro'
 Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
-Plug 'haishanh/night-owl.vim'
-Plug 'mengelbrecht/lightline-bufferline'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
+Plug 'frenzyexists/aquarium-vim', { 'branch': 'develop' }
+Plug 'sainnhe/sonokai'
+Plug 'zefei/vim-wintabs'
+
 call plug#end()
 
 "バッファを切り替える（※バッファはメモリに展開されたファイル）
@@ -145,49 +142,23 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 let mapleader = ","
 let ayucolor="dark" 
 let background="dark"
-colorscheme embark
+colorscheme aylin
 
 "use lightline-buffer in lightline
 let g:lightline = {
-      \ 'colorscheme': 'rosepine',
+      \ 'colorscheme': 'aquarium',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'tabline': {
-      \   'left': [ ['buffers'] ],
-      \   'right': [ ['close'] ]
-      \ },
-      \ 'component_expand': {
-      \   'buffers': 'lightline#bufferline#buffers'
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead'
       \ },
-      \ 'component_type': {
-      \   'buffers': 'tabsel'
-      \ }
       \ }
 
 
 "----------------------------------------
 " Plugin Settings
 "----------------------------------------
-" lightline-buffer ui settings
-" replace these symbols with ascii characters if your environment does not support unicode
-let g:lightline_buffer_logo = ' '
-let g:lightline_buffer_readonly_icon = ''
-let g:lightline_buffer_modified_icon = '✭'
-let g:lightline_buffer_git_icon = ' '
-let g:lightline_buffer_ellipsis_icon = '..'
-let g:lightline_buffer_expand_left_icon = '◀ '
-let g:lightline_buffer_expand_right_icon = ' ▶'
-let g:lightline_buffer_active_buffer_left_icon = '◀'
-let g:lightline_buffer_active_buffer_right_icon = '▶'
-let g:lightline_buffer_separator_icon = '  '
-
-" enable devicons, only support utf-8
-" require <https://github.com/ryanoasis/vim-devicons>
-let g:lightline_buffer_enable_devicons = 1
 
 
 "Coc.vim関連の設定
@@ -230,8 +201,8 @@ endfunction
 let g:fern#renderer = "nerdfont"
 " 隠しファイルを表示する
 let g:fern#default_hidden=1
-"Fern　Ctrl+nでファイルツリーを表示/非表示する
-nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=25<CR>
+"Fern　Ctrl+nで全画面でファイルツリーを表示/非表示する
+nnoremap <C-n> :Fern . -reveal=% <CR>
 " アイコンに色をつける
 augroup my-glyph-palette
   autocmd! *
@@ -260,6 +231,27 @@ let g:indentLine_char = '┊'
   set guioptions-=L
   set guioptions-=b
 "endif
+
+if has('terminal')
+  function! s:set_default_ansi_colors() abort
+    if exists('g:terminal_ansi_colors')
+      return
+    endif
+
+    let g:terminal_ansi_colors = [
+      \ "#0c0c0c", "#F75D59", "#3cb371", "#c19c00",
+      \ "#38ACEC", "#881798", "#3a96dd", "#cccccc",
+      \ "#767676", "#F778A1", "#3EA99F", "#F2BB66",
+      \ "#3b78ff", "#b4009e", "#61d6d6", "#e8e8e8"
+      \ ]
+  endfunction
+  call s:set_default_ansi_colors()
+
+  augroup vimrc
+    autocmd!
+    autocmd ColorScheme * call s:set_default_ansi_colors()
+  augroup END
+endif
 
 "fzf.vimの起動時のウィンドウの高さ
 let g:fzf_layout = { 'down': '60%' }
