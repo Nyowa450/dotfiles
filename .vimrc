@@ -191,7 +191,8 @@ nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
 nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
 nmap <silent> gr <Plug>(coc-references) "参照
 nmap <silent> gF <Plug>(coc-format-selected) "formatする
-
+" Show all diagnostics.
+nnoremap <silent><nowait> <leader>a  :<C-u>CocList diagnostics<cr>
 nnoremap <silent> K :call ShowDocumentation()<CR> 
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -260,7 +261,7 @@ endif
 
 
 "fzf-preview-vimのショートカット（","+各キーで検索起動）
-nnoremap <silent> <leader>f :<C-u>FzfPreviewProjectFilesRpc<CR>
+nnoremap <silent> <leader>f :<C-u>FzfPreviewDirectoryFilesRpc<CR>
 nnoremap <silent> <leader>g :<C-u>FzfPreviewGitFilesRpc<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewAllBuffersRpc<CR>
 nnoremap <silent> <leader>l :<C-u>FzfPreviewBufferLinesRpc<CR>
@@ -270,6 +271,8 @@ nnoremap <leader>r :<C-u>FzfPreviewProjectGrepRpc<Space>
 " Use vim-devicons
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+let g:fzf_preview_directory_files_command ='rg --files --hidden --follow --glob "!{.git/*,node_modules/*}"'
+let g:fzf_preview_grep_cmd = 'rg --line-number --no-heading --color=never --hidden --glob "!{.git/*,node_modules/*}"'
 
 " The prefix key.
 nnoremap    [Tag]   <Nop>
