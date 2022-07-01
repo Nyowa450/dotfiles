@@ -98,7 +98,6 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
-Plug 'junegunn/fzf.vim'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'yggdroot/indentLine' "インデントに線を追加
 Plug 'miyakogi/seiya.vim' "余分な背景等を非表示
@@ -147,6 +146,7 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 let mapleader = ","
 let ayucolor="dark" 
 let background="dark"
+let g:aquarium_style="dark"
 colorscheme aquarium
 
 "use lightline-buffer in lightline
@@ -258,8 +258,6 @@ if has('terminal')
   augroup END
 endif
 
-"fzf.vimの起動時のウィンドウの高さ
-let g:fzf_layout = { 'down': '60%' }
 
 "fzf-preview-vimのショートカット（","+各キーで検索起動）
 nnoremap <silent> <leader>f :<C-u>FzfPreviewProjectFilesRpc<CR>
