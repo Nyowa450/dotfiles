@@ -1,7 +1,8 @@
 
 set nocompatible
-":terminalで起動するshellをFishに
-set shell=fish
+":terminalで起動するshellをbashに（fzf-preview用）
+set shell=/bin/bash
+let $SHELL = "/bin/bash"
 
 " 画面表示の設定
 set number         " 行番号を表示する
@@ -9,14 +10,14 @@ set showtabline=2  " always show tabline
 set pumheight=16
 set laststatus=2   " ステータス行を常に表示
 set cmdheight=2    " メッセージ表示欄を2行確保
-set showmatch      " 対応する括弧を強調表示
+
 set helpheight=999 " ヘルプを画面いっぱいに開く
 set noshowmode
 " 不可視文字の表示記号指定
 set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 
 " カーソル移動関連の設定
-
+set showmatch
 set backspace=indent,eol,start " Backspaceキーの影響範囲に制限を設けない
 set whichwrap=b,s,h,l,<,>,[,]  " 行頭行末の左右移動で行をまたぐ
 set scrolloff=8                " 上下8行の視界を確保
@@ -96,6 +97,7 @@ Plug 'simeji/winresizer'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 Plug 'junegunn/fzf.vim'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'yggdroot/indentLine' "インデントに線を追加
@@ -123,7 +125,10 @@ Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'frenzyexists/aquarium-vim', { 'branch': 'develop' }
 Plug 'sainnhe/sonokai'
+Plug 'alvan/vim-closetag'
 Plug 'zefei/vim-wintabs'
+Plug 'zefei/vim-wintabs-powerline'
+
 
 call plug#end()
 
@@ -142,7 +147,7 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 let mapleader = ","
 let ayucolor="dark" 
 let background="dark"
-colorscheme aylin
+colorscheme aquarium
 
 "use lightline-buffer in lightline
 let g:lightline = {
@@ -256,13 +261,17 @@ endif
 "fzf.vimの起動時のウィンドウの高さ
 let g:fzf_layout = { 'down': '60%' }
 
-"fzf.vimのショートカット（","+各キーで検索起動）
-nnoremap <silent> <leader>f :Files<CR>
-nnoremap <silent> <leader>g :GFiles<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>l :BLines<CR>
-nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>m :Mark<CR>
+"fzf-preview-vimのショートカット（","+各キーで検索起動）
+nnoremap <silent> <leader>f :<C-u>FzfPreviewProjectFilesRpc<CR>
+nnoremap <silent> <leader>g :<C-u>FzfPreviewGitFilesRpc<CR>
+nnoremap <silent> <leader>b :<C-u>FzfPreviewAllBuffersRpc<CR>
+nnoremap <silent> <leader>l :<C-u>FzfPreviewBufferLinesRpc<CR>
+nnoremap <silent> <leader>h :<C-u>FzfPreviewCommandPaletteRpc<CR>
+nnoremap <leader>r :<C-u>FzfPreviewProjectGrepRpc<Space>
+
+" Use vim-devicons
+let g:fzf_preview_use_dev_icons = 1
+let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 
 " The prefix key.
 nnoremap    [Tag]   <Nop>
@@ -281,3 +290,15 @@ nnoremap <silent> <leader>p :CocCommand markdown-preview-enhanced.openPreview<CR
 let g:vim_markdown_conceal = 0
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_folding_disabled = 1
+
+" vim-closetagの各種設定
+  let g:closetag_filenames='*.html'
+  let g:closetag_xhtml_filenames='*.jsx,*.tsx,*.vue'
+  let g:closetag_filetypes='html'
+  let g:closetag_xhtml_filetypes='jsx,tsx,javascript.jsx,typescript.tsx,vue'
+  let g:closetag_emptyTags_caseSensitive=1
+  let g:closetag_shortcut='>'
+" Enables closing tags for React fragments -> <></> for all supported file types
+"
+let g:closetag_enable_react_fragment = 1
+
