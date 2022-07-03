@@ -123,7 +123,7 @@ Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'frenzyexists/aquarium-vim', { 'branch': 'develop' }
-Plug 'sainnhe/sonokai'
+Plug 'sainnhe/everforest'
 Plug 'alvan/vim-closetag'
 Plug 'zefei/vim-wintabs'
 Plug 'zefei/vim-wintabs-powerline'
@@ -143,15 +143,21 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "カラースキーム指定
+ set background=dark
+let g:everforest_disable_italic_comment = 1 "イタリックを無効化
+let g:everforest_background = 'soft'
+let g:everforest_diagnostic_text_highlight = 1 "textハイライトを有効化
+let g:everforest_better_performance = 1
+
+colorscheme everforest
 let mapleader = ","
-let ayucolor="dark" 
-let background="dark"
+
 let g:aquarium_style="dark"
-colorscheme aquarium
+"colorscheme nord
 
 "use lightline-buffer in lightline
 let g:lightline = {
-      \ 'colorscheme': 'aquarium',
+      \ 'colorscheme': 'everforest',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
@@ -191,6 +197,7 @@ nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
 nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
 nmap <silent> gr <Plug>(coc-references) "参照
 nmap <silent> gF <Plug>(coc-format-selected) "formatする
+nmap <silent> ma <Plug>(coc-codeaction-selected)iw
 " Show all diagnostics.
 nnoremap <silent><nowait> <leader>a  :<C-u>CocList diagnostics<cr>
 nnoremap <silent> K :call ShowDocumentation()<CR> 
@@ -263,6 +270,8 @@ endif
 "fzf-preview-vimのショートカット（","+各キーで検索起動）
 nnoremap <silent> <leader>f :<C-u>FzfPreviewDirectoryFilesRpc<CR>
 nnoremap <silent> <leader>g :<C-u>FzfPreviewGitFilesRpc<CR>
+nnoremap <silent> <leader>gs :<C-u>FzfPreviewGitStatusRpc<CR>
+nnoremap <silent> <leader>ga :<C-u>FzfPreviewGitActionsRpc<CR>
 nnoremap <silent> <leader>b :<C-u>FzfPreviewAllBuffersRpc<CR>
 nnoremap <silent> <leader>l :<C-u>FzfPreviewBufferLinesRpc<CR>
 nnoremap <silent> <leader>h :<C-u>FzfPreviewCommandPaletteRpc<CR>
@@ -293,13 +302,14 @@ let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_folding_disabled = 1
 
 " vim-closetagの各種設定
-  let g:closetag_filenames='*.html'
-  let g:closetag_xhtml_filenames='*.jsx,*.tsx,*.vue'
+  let g:closetag_filenames='*.html,*.js,*.jsx,*.tsx'
+  let g:closetag_xhtml_filenames='*.,*.jsx,*.tsx,*.vue'
   let g:closetag_filetypes='html'
   let g:closetag_xhtml_filetypes='jsx,tsx,javascript.jsx,typescript.tsx,vue'
   let g:closetag_emptyTags_caseSensitive=1
   let g:closetag_shortcut='>'
-" Enables closing tags for React fragments -> <></> for all supported file types
+  " Enables closing tags for React fragments -> <></> for all supported file types
 "
-let g:closetag_enable_react_fragment = 1
+"let g:closetag_enable_react_fragment = 1
+
 
