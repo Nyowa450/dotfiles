@@ -109,20 +109,22 @@ Plug 'morhetz/gruvbox'
 Plug 'cohama/lexima.vim'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'lambdalisue/fern.vim' "多機能ファイラー
-Plug 'lambdalisue/fern-git-status.vim'
+Plug 'yuki-yano/fern-preview.vim'
+"Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 Plug 'sheerun/vim-polyglot' "構文解析
 Plug 'arcticicestudio/nord-vim'
 Plug 'bluz71/vim-nightfly-guicolors'
 Plug 'AhmedAbdulrahman/vim-aylin'
-Plug 'cocopon/iceberg.vim'
+
 Plug 'sheerun/vim-polyglot'
-Plug 'phanviet/vim-monokai-pro'
+
 Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 Plug 'frenzyexists/aquarium-vim', { 'branch': 'develop' }
+Plug 'thinca/vim-quickrun'
 Plug 'sainnhe/everforest'
 Plug 'alvan/vim-closetag'
 Plug 'zefei/vim-wintabs'
@@ -200,7 +202,7 @@ nmap <silent> gF <Plug>(coc-format-selected) "formatする
 nmap <silent> ma <Plug>(coc-codeaction-selected)iw
 " Show all diagnostics.
 nnoremap <silent><nowait> <leader>a  :<C-u>CocList diagnostics<cr>
-nnoremap <silent> K :call ShowDocumentation()<CR> 
+nnoremap <silent> K :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
@@ -221,6 +223,18 @@ augroup my-glyph-palette
   autocmd! *
   autocmd FileType fern call glyph_palette#apply()
   autocmd FileType nerdtree,startify call glyph_palette#apply()
+augroup END
+"fern-preview関連のキーバインディング
+function! s:fern_settings() abort
+  nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
+  nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
+  nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
+  nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+endfunction
+
+augroup fern-settings
+  autocmd!
+  autocmd FileType fern call s:fern_settings()
 augroup END
 
 " indentLineの設定
@@ -284,14 +298,14 @@ let g:fzf_preview_directory_files_command ='rg --files --hidden --follow --glob 
 let g:fzf_preview_grep_cmd = 'rg --line-number --no-heading --color=never --hidden --glob "!{.git/*,node_modules/*}"'
 
 " The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
+"nnoremap    [Tag]   <Nop>
+"nmap    t [Tag]
 
-map <silent> [Tag]x :tabclose<CR>
+"map <silent> [Tag]x :tabclose<CR>
 " tx タブを閉じる
-map <silent> [Tag]n :tabnext<CR>
+"map <silent> [Tag]n :tabnext<CR>
 " tn 次のタブ
-map <silent> [Tag]p :tabprevious<CR>
+"map <silent> [Tag]p :tabprevious<CR>
 " tp 前のタブ
 
 "Markdown関連
