@@ -95,17 +95,16 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'simeji/winresizer'
 Plug 'tomtom/tcomment_vim'
-Plug 'tpope/vim-fugitive'
+
+Plug 'lambdalisue/gina.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
-Plug 'ghifarit53/tokyonight-vim'
 Plug 'yggdroot/indentLine' "インデントに線を追加
 Plug 'miyakogi/seiya.vim' "余分な背景等を非表示
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Coc.nvimを導入
-Plug 'simeji/winresizer'
 Plug 'itchyny/lightline.vim' "ステータスラインをカスタマイズ
 Plug 'ryanoasis/vim-devicons' "アイコン導入
-Plug 'morhetz/gruvbox'
+Plug 'vim-jp/vimdoc-ja'
 Plug 'cohama/lexima.vim'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'lambdalisue/fern.vim' "多機能ファイラー
@@ -114,16 +113,10 @@ Plug 'yuki-yano/fern-preview.vim'
 Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 Plug 'sheerun/vim-polyglot' "構文解析
-Plug 'arcticicestudio/nord-vim'
-Plug 'bluz71/vim-nightfly-guicolors'
-Plug 'AhmedAbdulrahman/vim-aylin'
 
-Plug 'sheerun/vim-polyglot'
 
-Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
-Plug 'frenzyexists/aquarium-vim', { 'branch': 'develop' }
 Plug 'thinca/vim-quickrun'
 Plug 'sainnhe/everforest'
 Plug 'alvan/vim-closetag'
@@ -198,6 +191,7 @@ nmap <silent> gd <Plug>(coc-definition) "定義にジャンプ→Ctrl-oで戻る
 nmap <silent> gy <Plug>(coc-type-definition) "型定義を参照
 nmap <silent> gi <Plug>(coc-implementation) "implementationを参照
 nmap <silent> gr <Plug>(coc-references) "参照
+nmap <silent> gn <Plug>(coc-rename)
 nmap <silent> gF <Plug>(coc-format-selected) "formatする
 nmap <silent> ma <Plug>(coc-codeaction-selected)iw
 " Show all diagnostics.
@@ -224,12 +218,13 @@ augroup my-glyph-palette
   autocmd FileType fern call glyph_palette#apply()
   autocmd FileType nerdtree,startify call glyph_palette#apply()
 augroup END
-"fern-preview関連のキーバインディング
+"fern,preview関連のキーバインディング
 function! s:fern_settings() abort
   nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
   nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
   nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
   nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+  nmap <silent> <buffer> dd <Plug>(fern-action-remove)
 endfunction
 
 augroup fern-settings
@@ -295,8 +290,8 @@ nnoremap <leader>r :<C-u>FzfPreviewProjectGrepRpc<Space>
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 let g:fzf_preview_directory_files_command ='rg --files --hidden --follow --glob "!{.git/*,node_modules/*}"'
-let g:fzf_preview_grep_cmd = 'rg --line-number --no-heading --color=never --hidden --glob "!{.git/*,node_modules/*}"'
-
+let g:fzf_preview_grep_cmd = 'rg --line-number --no-heading --hidden --glob "!{.git/*,node_modules/*}"'
+let $FZF_PREVIEW_PREVIEW_BAT_THEME = 'Nord'
 " The prefix key.
 "nnoremap    [Tag]   <Nop>
 "nmap    t [Tag]
